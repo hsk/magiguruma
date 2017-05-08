@@ -1,4 +1,4 @@
-all: new users tweet
+all: new kill users tweet
 
 users: users1 users2 users3 users4
 tweet: tweet1 tweet2 tweet3
@@ -11,7 +11,7 @@ new:
 
 kill:
 	ps > tmp.rb
-	ruby -ne "m = \$$_.match(/([0-9]+)\\s[^\\s]+\\s+[0-9:]+\\sruby/); if m; p m[0]; `kill -9 #{m[1]}`end" tmp.rb
+	sudo ruby -ne "m = \$$_.match(/([0-9]+)\\s[^\\s]+\\s+[0-9:]+\\s(ruby|make)/); if m; system \"kill -9 #{m[1]}\"; end" tmp.rb
 
 users1:
 	@echo コントローラとビューの作成
