@@ -1,4 +1,4 @@
-all: new
+all: new users tweet
 
 users: users1 users2 users3 users4
 tweet: tweet1 tweet2 tweet3
