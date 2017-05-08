@@ -150,6 +150,15 @@ tweet3:
 	echo "<% end %>" >> tmp.rb
 	mv tmp.rb app/views/tweets/index.html.erb
 
+haml:
+	echo "gem 'haml-rails'" >> Gemfile
+	echo "gem 'erb2haml'" >> Gemfile
+	bundle install
+	rake haml:replace_erbs
+	rails g scaffold Hoge name:string age:integer
+	rake db:migrate
+	vivaldi http://localhost:3000/hoges
+
 run:
 	vivaldi http://localhost:3000/users/show &
 	rails s
