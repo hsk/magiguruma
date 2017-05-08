@@ -1,6 +1,8 @@
-view_users_show = "app/views/users/show.html.erb"
+run:
+	vivaldi http://localhost:3000/users/show
+	rails s
 
-all: new users_controller users_show users_show2
+all: new users_controller users_show
 
 new:
 	rails new test1
@@ -8,16 +10,18 @@ new:
 	rm -rf test1
 
 users_controller:
+	sleep 5
 	rails g controller users index show
 
 users_show:
-	echo '<h1><%= @user[:name] %></h1>' > $(view_users_show)
-	echo '<p><%= @user[:username] %></p>' >> $(view_users_show)
-	echo '<ul>' >> $(view_users_show)
-	echo '  <li>Location : <%= @user[:location] %></li>' >> $(view_users_show)
-	echo '  <li>About    : <%= @user[:about] %></li>' >> $(view_users_show)
-	echo '</ul>' >> $(view_users_show)
-users_show2:
+	echo '<h1><%= @user[:name] %></h1>' > tmp.rb
+	echo '<p><%= @user[:username] %></p>' >> tmp.rb
+	echo '<ul>' >> tmp.rb
+	echo '  <li>Location : <%= @user[:location] %></li>' >> tmp.rb
+	echo '  <li>About    : <%= @user[:about] %></li>' >> tmp.rb
+	echo '</ul>' >> tmp.rb
+	mv tmp.rb app/views/users/show.html.erb
+
 	echo '' > tmp.rb
 	echo "  def show" >> tmp.rb
 	echo "    @user = Hash.new" >> tmp.rb
