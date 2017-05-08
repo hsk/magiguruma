@@ -4,14 +4,18 @@ users: users1 users2 users3 users4
 tweet: tweet1 tweet2 tweet3
 
 new:
+	echo 新規プロジェクト作成
 	rails new test1
 	mv test1/* .
 	rm -rf test1
 
 users1:
+	# コントローラとビューの作成
 	rails g controller users index show
 
 users2:
+
+	# users/show ビュー作成
 	echo '<h1><%= @user[:name] %></h1>' > tmp.rb
 	echo '<p><%= @user[:username] %></p>' >> tmp.rb
 	echo '<ul>' >> tmp.rb
@@ -20,6 +24,7 @@ users2:
 	echo '</ul>' >> tmp.rb
 	mv tmp.rb app/views/users/show.html.erb
 
+	# users/show コントローラ作成
 	echo '' > tmp.rb
 	echo "  def show" >> tmp.rb
 	echo "    @user = Hash.new" >> tmp.rb
@@ -34,17 +39,27 @@ users2:
 
 
 users3:
+
+	# ルータ設定
 	ruby -pne "\$$_.sub!(/get 'users\\/show'/, \"get 'users/show/:username' => 'users#show'\")" -i config/routes.rb 
+
+	# 表示
 	vivaldi http://localhost:3000/users/show/foo &
 
 users4:
-	
+
+	# db 作成
 	rake db:create
+
+	# モデル作成
 	rails g model user name:string username:string location:string about:text
 	cat app/models/user.rb
 	cat db/migrate/*_create_users.rb
+
+	# db マイグレーション
 	rake db:migrate
 
+	# db シード作成
 	echo "User.delete_all()" > tmp.rb
 	echo "@user = User.new" >> tmp.rb
 	echo "@user.name = 'Ryo Suzuki'" >> tmp.rb
@@ -59,12 +74,13 @@ users4:
 	echo "@user.location = 'Tottori, Japan'" >> tmp.rb
 	echo "@user.about = 'Nice to meet you. I am from database!'" >> tmp.rb
 	echo "@user.save" >> tmp.rb
-
 	mv tmp.rb db/seeds.rb
 	cat db/seeds.rb
 
+	# rake seed実行
 	rake db:seed
 
+	# user/show コントローラ修正
 	echo '' > tmp.rb
 	echo "  def show" >> tmp.rb
 	echo "    @user = User.find_by(:username=>params[:username])" >> tmp.rb
@@ -74,13 +90,22 @@ users4:
 	cat app/controllers/users_controller.rb
 
 tweet1:
+
+	# tweets コントローラ作成
 	rails g controller tweets index show new
+
+	# tweets モデル作成
 	rails g model tweet title:string content:text
+
+	# マイグレーション
 	rake db:migrate
+
+	# 表示
 	vivaldi http://0.0.0.0:3000/tweets/new &
 
 tweet2:
 
+	# tweets/new ビュー作成
 	echo '' > tmp.rb
 	echo "<%= form_for Tweet.new do |f| %>" >> tmp.rb
 	echo "  <%=f.label :title %>" >> tmp.rb
@@ -91,9 +116,11 @@ tweet2:
 	echo "<% end %>" >> tmp.rb
 	mv tmp.rb app/views/tweets/new.html.erb
 
+	# tweet/new ルータ設定
 	ruby -pne "\$$_.sub!(/(get 'tweets\\/new')/, \"\\\\1\\n  post 'tweets' => 'tweets#create'\")" -i config/routes.rb
 
 
+	# tweet/create コントローラ修正
 	echo "def create" > tmp.rb
 	echo "    @tweet = Tweet.new" >> tmp.rb
 	echo "    @tweet.title = params[:tweet][:title]" >> tmp.rb
@@ -101,17 +128,18 @@ tweet2:
 	echo "    @tweet.save" >> tmp.rb
 	echo "    redirect_to '/tweets/index'" >> tmp.rb
 	echo "  end" >> tmp.rb
-
 	ruby -pne "\$$_.sub!(/(def show)/m, File.read('tmp.rb')+\"\n  \\\\1\\n  \")" -i app/controllers/tweets_controller.rb
 
 tweet3:
+
+	# tweet/index コントローラ修正
 	ruby -pne "\$$_.sub!(/(def index)/m, \"\\\\1\\n    @tweets = Tweet.all\")" -i app/controllers/tweets_controller.rb
 
+	# tweet/index ビュー作成
 	echo "<% @tweets.each do |tweet| %>" > tmp.rb
 	echo "<h1><%= tweet.title %></h1>" >> tmp.rb
 	echo "<p><%= tweet.content %></p>" >> tmp.rb
 	echo "<% end %>" >> tmp.rb
-
 	mv tmp.rb app/views/tweets/index.html.erb
 
 run:
