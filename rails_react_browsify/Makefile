@@ -20,6 +20,7 @@ redux1:
 	npm init
 	echo "gem 'browserify-rails'" >> Gemfile
 	echo "gem 'react-rails'" >> Gemfile
+	bundle install
 	rails g react:install
 
 redux2:
@@ -36,17 +37,19 @@ redux2:
 
 redux3:
 	sudo npm install --save-dev browserify browserify-incremental babelify babel-preset-es2015 babel-preset-react
-	sudo npm install --save react react-redux redux redux-thunk
+	sudo npm install --save react react-dom react-redux redux redux-thunk
 
 	echo "{" > .babelrc
 	echo '  "presets": ["es2015", "react"]' >> .babelrc
 	echo "}" >> .babelrc
 
 redux4:
-	ruby Makefile_redux.rb
+	rails g controller users show
+	ruby Makefile_react.rb
+	vivaldi http://localhost:3000/users/1 &
 
 run:
-	vivaldi http://localhost:3000/users/show &
+	vivaldi http://localhost:3000/users/1 &
 	rails s
 
 clean:

@@ -68,6 +68,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
+EOF
 
 File.write("app/assets/javascripts/components/reducers/index.js", <<-EOF)
 
