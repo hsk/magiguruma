@@ -1,14 +1,14 @@
-all: new users_controller users_show run
+all: new
 
 new:
 	rails new test1
 	mv test1/* .
 	rm -rf test1
 
-users_controller:
+users1:
 	rails g controller users index show
 
-users_show:
+users2:
 	echo '<h1><%= @user[:name] %></h1>' > tmp.rb
 	echo '<p><%= @user[:username] %></p>' >> tmp.rb
 	echo '<ul>' >> tmp.rb
@@ -30,11 +30,11 @@ users_show:
 	cat app/controllers/users_controller.rb
 
 
-users_show2:
+users3:
 	ruby -pne "\$$_.sub!(/get 'users\\/show'/, \"get 'users/show/:username' => 'users#show'\")" -i config/routes.rb 
 	vivaldi http://localhost:3000/users/show/foo &
 
-users_show3:
+users4:
 	
 	rake db:create
 	rails g model user name:string username:string location:string about:text
@@ -76,7 +76,6 @@ tweet1:
 	rake db:migrate
 	vivaldi http://0.0.0.0:3000/tweets/new &
 
-
 tweet2:
 
 	echo '' > tmp.rb
@@ -105,7 +104,6 @@ tweet2:
 tweet3:
 	ruby -pne "\$$_.sub!(/(def index)/m, \"\\\\1\\n    @tweets = Tweet.all\")" -i app/controllers/tweets_controller.rb
 
-next:
 	echo "<% @tweets.each do |tweet| %>" > tmp.rb
 	echo "<h1><%= tweet.title %></h1>" >> tmp.rb
 	echo "<p><%= tweet.content %></p>" >> tmp.rb
