@@ -120,5 +120,5 @@ run:
 
 clean:
 	rm -rf *
-	git checkout Makefile
+	git checkout Makefile README.md
 
