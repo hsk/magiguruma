@@ -51,5 +51,5 @@ run:
 
 clean:
 	rm -rf *
-	git checkout Makefile README.md
+	git checkout Makefile* README.md
 
