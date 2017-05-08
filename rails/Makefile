@@ -1,5 +1,8 @@
 all: new
 
+users: users1 users2 users3 users4
+tweet: tweet1 tweet2 tweet3
+
 new:
 	rails new test1
 	mv test1/* .
