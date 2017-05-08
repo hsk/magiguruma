@@ -32,120 +32,86 @@ users_show:
 
 users_show2:
 	ruby -pne "\$$_.sub!(/get 'users\\/show'/, \"get 'users/show/:username' => 'users#show'\")" -i config/routes.rb 
+	vivaldi http://localhost:3000/users/show/foo &
 
-next1:
+users_show3:
 	
-
-	ruby -pen "$$_.sub!(/get 'users\\/show'/, \"get 'users/show/:username' => 'users#show'\")" -i config/routers.rb
-
-	```
-	open http://localhost:3000/users/show/foo
-	```
-
-	```
 	rake db:create
-	```
-
-	```
 	rails g model user name:string username:string location:string about:text
-	```
-
-	app/models/user.rb
-
-	db/migrate/20130630062417_create_users.rb
-
-	```
+	cat app/models/user.rb
+	cat db/migrate/*_create_users.rb
 	rake db:migrate
-	```
 
-	db/seeds.rb
+	echo "User.delete_all()" > tmp.rb
+	echo "@user = User.new" >> tmp.rb
+	echo "@user.name = 'Ryo Suzuki'" >> tmp.rb
+	echo "@user.username = 'foo'" >> tmp.rb
+	echo "@user.location = 'Kanagawa, Japan'" >> tmp.rb
+	echo "@user.about = 'Hello, I am Ryo. I am from database!'" >> tmp.rb
+	echo "@user.save" >> tmp.rb
+	echo "" >> tmp.rb
+	echo "@user = User.new" >> tmp.rb
+	echo "@user.name = 'Shohei Aoki'" >> tmp.rb
+	echo "@user.username = 'bar'" >> tmp.rb
+	echo "@user.location = 'Tottori, Japan'" >> tmp.rb
+	echo "@user.about = 'Nice to meet you. I am from database!'" >> tmp.rb
+	echo "@user.save" >> tmp.rb
 
-	```
-	User.delete_all()
-	@user = User.new
-	@user.name = 'Ryo Suzuki'
-	@user.username = 'foo'
-	@user.location = 'Kanagawa, Japan'
-	@user.about = 'Hello, I am Ryo. I am from database!'
-	@user.save
+	mv tmp.rb db/seeds.rb
+	cat db/seeds.rb
 
-	@user = User.new
-	@user.name = 'Shohei Aoki'
-	@user.username = 'bar'
-	@user.location = 'Tottori, Japan'
-	@user.about = 'Nice to meet you. I am from database!'
-	@user.save
-	```
-
-	```
 	rake db:seed
-	```
 
-	```
-	def show
-	@user = User.find_by(:username=>params[:username])
-	end
-	```
+	echo '' > tmp.rb
+	echo "  def show" >> tmp.rb
+	echo "    @user = User.find_by(:username=>params[:username])" >> tmp.rb
+	echo "  end" >> tmp.rb
+	ruby -e 'puts File.read("app/controllers/users_controller.rb").sub(/\s+def show.+?end\s+/m,"\n"+File.read("tmp.rb")+"\n")' > tmp2.rb
+	mv tmp2.rb app/controllers/users_controller.rb
+	cat app/controllers/users_controller.rb
 
-next:
-
-	```
+tweet1:
 	rails g controller tweets index show new
 	rails g model tweet title:string content:text
-	```
-
-	```
 	rake db:migrate
-	```
+	vivaldi http://0.0.0.0:3000/tweets/new &
 
-	http://0.0.0.0:3000/tweets/new
 
-	```
-	<%= form_for Tweet.new do |f| %>
-	<%= f.label :title %>
-	<%= f.text_field :title %>
-	<%= f.label :content %>
-	<%= f.text_area :content %>
-	<%= f.submit %>
-	<% end %>
-	```
+tweet2:
 
-	```
-	post "tweets" => "tweets#create"
-	```
+	echo '' > tmp.rb
+	echo "<%= form_for Tweet.new do |f| %>" >> tmp.rb
+	echo "  <%=f.label :title %>" >> tmp.rb
+	echo "  <%=f.text_field :title %>" >> tmp.rb
+	echo "  <%=f.label :content %>" >> tmp.rb
+	echo "  <%=f.text_area :content %>" >> tmp.rb
+	echo "  <%=f.submit %>" >> tmp.rb
+	echo "<% end %>" >> tmp.rb
+	mv tmp.rb app/views/tweets/new.html.erb
 
-	added app/controllers/tweets\_controller.rb
+	ruby -pne "\$$_.sub!(/(get 'tweets\\/new')/, \"\\\\1\\n  post 'tweets' => 'tweets#create'\")" -i config/routes.rb
 
-	```
-	def create
-	@tweet = Tweet.new
-	@tweet.title = params[:tweet][:title]
-	@tweet.content = params[:tweet][:content]
-	@tweet.save
-	redirect_to '/tweets/index'
-	end
-	```
 
-	```
-	def index
-	@tweets = Tweet.all
-	end
-	```
+	echo "def create" > tmp.rb
+	echo "    @tweet = Tweet.new" >> tmp.rb
+	echo "    @tweet.title = params[:tweet][:title]" >> tmp.rb
+	echo "    @tweet.content = params[:tweet][:content]" >> tmp.rb
+	echo "    @tweet.save" >> tmp.rb
+	echo "    redirect_to '/tweets/index'" >> tmp.rb
+	echo "  end" >> tmp.rb
 
-	app/views/tweets/index.html.erb
+	ruby -pne "\$$_.sub!(/(def show)/m, File.read('tmp.rb')+\"\n  \\\\1\\n  \")" -i app/controllers/tweets_controller.rb
 
-	```
-	<% @tweets.each do |tweet| %>
-	<h1><%= tweet.title %></h1>
-	<p><%= tweet.content %></p>
-	<% end %>
+tweet3:
+	ruby -pne "\$$_.sub!(/(def index)/m, \"\\\\1\\n    @tweets = Tweet.all\")" -i app/controllers/tweets_controller.rb
 
-	```
+next:
+	echo "<% @tweets.each do |tweet| %>" > tmp.rb
+	echo "<h1><%= tweet.title %></h1>" >> tmp.rb
+	echo "<p><%= tweet.content %></p>" >> tmp.rb
+	echo "<% end %>" >> tmp.rb
 
-	```
-	http://0.0.0.0:3000/tweets/index
-
-	```
+	mv tmp.rb app/views/tweets/index.html.erb
 
 run:
 	vivaldi http://localhost:3000/users/show &
