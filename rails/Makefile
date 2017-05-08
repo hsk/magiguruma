@@ -11,6 +11,10 @@ new:
 
 kill:
 	ps > tmp.rb
+	sudo ruby -ne "m = \$$_.match(/([0-9]+)\\s[^\\s]+\\s+[0-9:]+\\s(ruby)/); if m; system \"kill -9 #{m[1]}\"; end" tmp.rb
+
+killmake:
+	ps > tmp.rb
 	sudo ruby -ne "m = \$$_.match(/([0-9]+)\\s[^\\s]+\\s+[0-9:]+\\s(ruby|make)/); if m; system \"kill -9 #{m[1]}\"; end" tmp.rb
 
 users1:
