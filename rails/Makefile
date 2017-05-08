@@ -26,7 +26,8 @@ users_show2:
 	echo "    @user[:location] = 'Tottori, Japan'" >> tmp.rb
 	echo "    @user[:about] = 'Nice to meet you.'" >> tmp.rb
 	echo "  end" >> tmp.rb
-	ruby -e 'puts File.read("app/controllers/users_controller.rb").sub(/\s+def show.+?end\s+/m,"\n"+File.read("tmp.rb")+"\n")' > app/controllers/users_controller.rb
+	ruby -e 'puts File.read("app/controllers/users_controller.rb").sub(/\s+def show.+?end\s+/m,"\n"+File.read("tmp.rb")+"\n")' > tmp2.rb
+	mv tmp2.rb app/controllers/users_controller.rb
 	cat app/controllers/users_controller.rb
 clean:
 	rm -rf *
