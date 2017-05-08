@@ -9,6 +9,10 @@ new:
 	mv test1/* .
 	rm -rf test1
 
+kill:
+	ps > tmp.rb
+	ruby -ne "m = \$$_.match(/([0-9]+)\\s[^\\s]+\\s+[0-9:]+\\sruby/); if m; p m[0]; `kill -9 #{m[1]}`end" tmp.rb
+
 users1:
 	@echo コントローラとビューの作成
 	rails g controller users index show
