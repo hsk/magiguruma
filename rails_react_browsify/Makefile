@@ -53,6 +53,6 @@ run:
 	rails s
 
 clean:
-	rm -rf *
+	sudo rm -rf *
 	git checkout Makefile* README.md
 
