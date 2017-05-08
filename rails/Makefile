@@ -157,7 +157,7 @@ haml:
 	rake haml:replace_erbs
 	rails g scaffold Hoge name:string age:integer
 	rake db:migrate
-	vivaldi http://localhost:3000/hoges
+	vivaldi http://localhost:3000/hoge
 
 run:
 	vivaldi http://localhost:3000/users/show &
