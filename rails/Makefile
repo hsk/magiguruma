@@ -1,8 +1,4 @@
-run:
-	vivaldi http://localhost:3000/users/show
-	rails s
-
-all: new users_controller users_show
+all: new users_controller users_show run
 
 new:
 	rails new test1
@@ -33,6 +29,11 @@ users_show:
 	ruby -e 'puts File.read("app/controllers/users_controller.rb").sub(/\s+def show.+?end\s+/m,"\n"+File.read("tmp.rb")+"\n")' > tmp2.rb
 	mv tmp2.rb app/controllers/users_controller.rb
 	cat app/controllers/users_controller.rb
+
+run:
+	vivaldi http://localhost:3000/users/show
+	rails s
+
 clean:
 	rm -rf *
 	git checkout Makefile
