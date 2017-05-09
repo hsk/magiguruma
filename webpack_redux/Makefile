@@ -1,14 +1,13 @@
 # 全メイク
-all: npm build
+all: node_modules build
 
 # ローカル npm の初期化とインストール
-npm:
+node_modules:
 
 	# ローカルインストール
 	npm init -y
-	sudo npm install webpack --save-dev
 	sudo npm install --save react react-dom redux react-redux
-	sudo npm install --save-dev webpack-dev-server babel-loader babel-core babel-preset-es2015 babel-preset-react babel-plugin-transform-react-jsx
+	sudo npm install --save-dev webpack webpack-dev-server babel-loader babel-core babel-preset-es2015 babel-preset-react
 
 # ビルド
 build:
