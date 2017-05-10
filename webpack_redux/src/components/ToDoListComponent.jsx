@@ -1,20 +1,22 @@
 'use strict';
 import React from 'react';
-import { connect } from 'react-redux';
 import { toggleToDo } from '../actions/todo.jsx';
 
-export let ToDoListComponent = connect((state)=>({todo:state.todo}))(({todo, dispatch}) => {
-    return (
-        <ul>{
-            todo.map( (t) => {
-                return <li key={t.id}>
-                    <span style={ { textDecoration: t.completed ? 'line-through' : 'none' } }>
-                        { t.text }
-                        {/* 追加 */}
-                        <input type="checkbox" onClick={ (e) => {  dispatch(toggleToDo(t.id))  } } checked={ t.completed } />
+export default class ToDoListComponent extends React.Component {
+    render() {
+        return <ul>{
+            this.props.todos.map(todo =>
+                <li key={todo.id}>
+                    <span style={ { textDecoration: todo.completed ? 'line-through' : 'none' } }>
+                        { todo.text }
+                        <input type="checkbox" onClick={(e)=>this.click(e,todo)} checked={ todo.completed } />
                     </span>
-                </li>;
-            })
+                </li>
+            )
         }</ul>
-    );
-})
+    }
+
+    click(e, todo) {
+        this.props.dispatch(toggleToDo(todo.id))
+    }
+}

@@ -1,23 +1,20 @@
 'use strict';
 import React from 'react';
-import { connect } from 'react-redux';
 import { addToDo } from '../actions/todo.jsx';
 
-export let AddToDoComponent = connect()(({dispatch}) => {
-    let input;
-
-    const onSubmit = (e) => {
-        e.preventDefault();
-        dispatch(addToDo(input.value));
-        input.value = "";
-    };
-
-    return(
-        <div>
-            <form onSubmit={onSubmit}>
-                <input ref={ node => {input = node} }/>
+export default class AddToDoComponent extends React.Component {
+    render() {
+        return <div>
+            <form onSubmit={this.submit.bind(this)}>
+                <input ref={ node => this.input = node }/>
                 <button>Todo に追加する</button>
             </form>
         </div>
-    );
-});
+    }
+
+    submit(e) {
+        e.preventDefault();
+        this.props.dispatch(addToDo(this.input.value));
+        this.input.value = "";
+    }
+}
